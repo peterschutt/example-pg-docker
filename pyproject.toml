@@ -50,7 +50,7 @@ python = "^3.10"
 alembic = "^1.7"
 asyncpg = "^0.25"
 sqlalchemy = "^1.4"
-starlite = "^1.3"
+starlite = { git = "https://github.com/peterschutt/starlite.git", branch = "exclude-by-value" }
 uvicorn = {extras = ["standard"], version = "^0.17"}
 gunicorn = "^20.1"
 passlib = "^1.7"
