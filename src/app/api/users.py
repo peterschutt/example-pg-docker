@@ -17,6 +17,7 @@ router_dependencies = {"repository": Provide(UserRepository)}
 class UsersController(Controller):
     path = ""
     tags = ["Users"]
+    exclude_from_docs = ["limit_offset", "updated_filter"]
 
     @post(
         operation_id="Create User",
@@ -49,7 +50,12 @@ class UserDetailController(Controller):
     path = "{user_id:uuid}"
     tags = ["Users"]
 
-    @get(cache=True, operation_id="Get User", description="Details of a distinct User")
+    @get(
+        cache=True,
+        operation_id="Get User",
+        description="Details of a distinct User",
+        exclude_from_docs=["limit_offset"],
+    )
     async def get(self, user_id: UUID, repository: UserRepository) -> UserModel:
         return await repository.get_one(instance_id=user_id)
 
@@ -57,6 +63,7 @@ class UserDetailController(Controller):
         guards=[CheckPayloadMismatch("id", "user_id").__call__],
         operation_id="Update User",
         description="Modify a distinct User",
+        exclude_from_docs=["updated_filter"],
     )
     async def update_user(
         self, user_id: UUID, data: UserModel, repository: UserRepository
@@ -67,6 +74,7 @@ class UserDetailController(Controller):
         status_code=200,
         operation_id="Delete User",
         description="Delete the user and return its representation",
+        exclude_from_docs=["limit_offset", "updated_filter"],
     )
     async def delete(self, user_id: UUID, repository: UserRepository) -> UserModel:
         return await repository.delete(instance_id=user_id)
