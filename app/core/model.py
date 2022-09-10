@@ -1,13 +1,11 @@
 import re
 from datetime import datetime
+from uuid import UUID
 
 from sqlalchemy import MetaData
 from sqlalchemy.dialects import postgresql as pg
 from sqlalchemy.orm import Mapped, mapped_column
-from sqlalchemy.orm.decl_api import declared_attr, DeclarativeBase, registry
-
-from uuid import UUID
-
+from sqlalchemy.orm.decl_api import DeclarativeBase, declared_attr, registry
 
 convention = {
     "ix": "ix_%(column_0_label)s",
@@ -18,9 +16,8 @@ convention = {
 }
 
 
-class Base(DeclarativeBase):
-    """
-    Base for all SQLAlchemy declarative models.
+class Base(DeclarativeBase):  # type: ignore
+    """Base for all SQLAlchemy declarative models.
 
     Attributes
     ----------
@@ -35,7 +32,7 @@ class Base(DeclarativeBase):
     table_name_pattern = re.compile(r"(?<!^)(?=[A-Z])")
 
     # noinspection PyMethodParameters
-    @declared_attr
+    @declared_attr  # type: ignore[misc]
     def __tablename__(cls) -> str:  # pylint: disable=no-self-argument
         return re.sub(cls.table_name_pattern, "_", cls.__name__).lower()
 
